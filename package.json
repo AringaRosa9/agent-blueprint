@@ -1,0 +1,35 @@
+{
+  "name": "agent-blueprint",
+  "version": "1.0.0",
+  "description": "Claude Code Skills for building effective agents — architecture selection, tool design, and pattern code generation.",
+  "type": "module",
+  "bin": {
+    "agent-blueprint": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "install-skills": "npm run build && node dist/cli.js install",
+    "uninstall-skills": "npm run build && node dist/cli.js uninstall"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "agent",
+    "llm",
+    "anthropic",
+    "skills",
+    "ai-agent",
+    "prompt-engineering"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "@types/node": "^22.0.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

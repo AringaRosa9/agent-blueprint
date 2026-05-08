@@ -3,6 +3,8 @@
 > Anthropic《Building Effective Agents》方法论的 Claude Code Skill 实现 —— 从架构选型到代码落地的完整 Agent 开发工作流。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
+[![Node](https://img.shields.io/badge/Node.js-%3E%3D18-green.svg)](https://nodejs.org/)
 
 ## 这是什么？
 
@@ -12,7 +14,7 @@ Agent Blueprint 是一组 **Claude Code Skills**，将 Anthropic 官方研究博
 
 - **架构选型建议** — 不再纠结该用 Workflow 还是 Agent
 - **工具接口设计审查** — 按 ACI 最佳实践打磨你的工具定义
-- **可运行的代码模板** — 7 种模式的 Python/TypeScript 实现骨架
+- **可运行的代码模板** — 7 种模式的 TypeScript 实现骨架
 
 ## 包含的 Skills
 
@@ -24,30 +26,38 @@ Agent Blueprint 是一组 **Claude Code Skills**，将 Anthropic 官方研究博
 
 ## 快速安装
 
-### 一键安装
+### 方式一：npx（推荐）
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/agent-blueprint.git
+git clone https://github.com/AringaRosa9/agent-blueprint.git
 cd agent-blueprint
-chmod +x install.sh
-./install.sh
+npm install
+npm run build
+npx agent-blueprint install
 ```
 
-### 手动安装
-
-将 `skills/` 目录下的三个文件夹复制到 `~/.claude/skills/`：
+### 方式二：npm scripts
 
 ```bash
-cp -r skills/agent-architect ~/.claude/skills/
-cp -r skills/tool-designer ~/.claude/skills/
-cp -r skills/agent-patterns ~/.claude/skills/
+git clone https://github.com/AringaRosa9/agent-blueprint.git
+cd agent-blueprint
+npm install
+npm run install-skills
+```
+
+### CLI 命令
+
+```bash
+npx agent-blueprint install      # 安装所有 Skills 到 ~/.claude/skills/
+npx agent-blueprint uninstall    # 卸载所有 Skills
+npx agent-blueprint list         # 查看安装状态
+npx agent-blueprint help         # 帮助信息
 ```
 
 ### 卸载
 
 ```bash
-chmod +x uninstall.sh
-./uninstall.sh
+npx agent-blueprint uninstall
 ```
 
 ## 使用流程
@@ -71,7 +81,7 @@ chmod +x uninstall.sh
 │  Step 2: /agent-patterns                            │
 │  "给我 Parallelization + Evaluator-Optimizer 的代码"  │
 │                                                     │
-│  输出 → 可运行的 Python 代码骨架                       │
+│  输出 → 可运行的 TypeScript 代码骨架                   │
 │        基于 Anthropic SDK                            │
 └──────────────────────┬──────────────────────────────┘
                        │
@@ -107,7 +117,7 @@ Claude：推荐 Routing（Level 2）+ Augmented LLM（Level 0）
     给我一个 Routing 模式的客服系统代码，
     分三类：一般咨询、订单查询、退款处理
 
-Claude：[生成完整的 Python 代码，包含分类器、三个 handler、路由逻辑]
+Claude：[生成完整的 TypeScript 代码，包含分类器、三个 handler、路由逻辑]
 ```
 
 ### 场景三：我的 Agent 老是用错工具
@@ -168,19 +178,47 @@ Level 6  ──  Autonomous Agent     自主规划 + 工具循环
 
 ## 示例
 
-`examples/` 目录包含完整的示例代码：
+`examples/` 目录包含完整的 TypeScript 示例代码：
 
 | 示例 | 文件 | 使用的模式 |
 |------|------|-----------|
-| 智能客服系统 | [`customer_support.py`](examples/customer_support.py) | Routing + Augmented LLM |
-| 多维度代码审查 | [`code_reviewer.py`](examples/code_reviewer.py) | Parallelization (Voting) |
-| 深度调研 Agent | [`research_agent.py`](examples/research_agent.py) | Orchestrator-Workers + Evaluator-Optimizer |
+| 智能客服系统 | [`customer_support.ts`](examples/customer_support.ts) | Routing + Augmented LLM |
+| 多维度代码审查 | [`code_reviewer.ts`](examples/code_reviewer.ts) | Parallelization (Voting) |
+| 深度调研 Agent | [`research_agent.ts`](examples/research_agent.ts) | Orchestrator-Workers + Evaluator-Optimizer |
 
-运行示例前，请先安装依赖：
+### 运行示例
 
 ```bash
-pip install anthropic
+npm install @anthropic-ai/sdk
 export ANTHROPIC_API_KEY="your-api-key"
+
+# 运行智能客服示例
+npx tsx examples/customer_support.ts
+
+# 运行代码审查示例
+npx tsx examples/code_reviewer.ts
+
+# 运行深度调研示例（可自定义主题）
+npx tsx examples/research_agent.ts "量子计算对密码学的影响"
+```
+
+## 项目结构
+
+```
+agent-blueprint/
+├── src/
+│   └── cli.ts                     # CLI 工具（install / uninstall / list）
+├── skills/
+│   ├── agent-architect/SKILL.md   # 架构选型顾问
+│   ├── tool-designer/SKILL.md     # ACI 工具设计助手
+│   └── agent-patterns/SKILL.md    # 模式代码生成器
+├── examples/
+│   ├── customer_support.ts        # 智能客服（Routing）
+│   ├── code_reviewer.ts           # 代码审查（Parallelization）
+│   └── research_agent.ts          # 深度调研（Orchestrator + Evaluator）
+├── package.json
+├── tsconfig.json
+└── LICENSE
 ```
 
 ## 设计理念
